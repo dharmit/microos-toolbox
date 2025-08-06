@@ -199,6 +199,13 @@ container_create() {
         CREATE_NO_SANDBOX="--mount type=devpts,destination=/dev/pts,uid=$(id -u) --volume /sys:/sys:rslave --volume /:/media/root:rslave"
         CREATE_NO_SANDBOX="$CREATE_NO_SANDBOX --privileged --security-opt label=disable --pid host --ipc host"
     fi
+    local SUSECONNECT_FILES=""
+    if [ -s /etc/SUSEConnect ]; then
+       SUSECONNECT_FILES="$SUSECONNECT_FILES --volume /etc/SUSEConnect:/etc/SUSEConnect"
+    fi
+    if [ -s /etc/zypp/credentials.d/SCCcredentials ]; then
+       SUSECONNECT_FILES="$SUSECONNECT_FILES --volume /etc/zypp/credentials.d/SCCcredentials:/etc/zypp/credentials.d/SCCcredentials"
+    fi
     if ! ${SUDO} $CLI create \
                  $RUNTIME \
                  --hostname "$TOOLBOX_NAME" \
@@ -208,6 +215,7 @@ container_create() {
                  ${CREATE_AS_USER} \
                  --volume /etc/machine-id:/etc/machine-id:ro \
                  --volume /etc/localtime:/etc/localtime:ro \
+                 ${SUSECONNECT_FILES} \
                  ${PODMAN_ARGS[@]} \
                  "$TOOLBOX_IMAGE" sleep +Inf > /dev/null; then
         echo "$0: failed to create container '$TOOLBOX_NAME'"
