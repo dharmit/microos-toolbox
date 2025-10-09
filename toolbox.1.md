@@ -16,6 +16,8 @@ On systems using `transactional-update` it is not really possible - due to the r
 
 The root filesystem can be found at `/media/root`. In a "user toolbox" (i.e., one started with `toolbox -u`) the user's home directory is available in the usual place (`/home/$USER`).
 
+The "user toolbox" (`toolbox -u` command) does not work for the user `root` and would not be useful anyway.
+
 The following options are available in `toolbox`:
 
 * `-h` or `--help`: Shows the help message
@@ -70,7 +72,7 @@ It is possible to interact with `toolbox` using a command based interface such a
 * `run`: Run a command / start a program inside a toolbox
 * `list`: Show existing toolboxes, although for now it is basically an alias to `podman ps -a`
 
-This commands imply user mode (-u) and uses a different container (`toolbox-<user>-user` vs. `toolbox-<user>`).
+This commands imply user mode (-u) and uses a different container (`toolbox-<user>-user` vs. `toolbox-<user>`). This implies that this commands (except `list`) don't work for the user `root`. In this case just run `toolbox` or `toolbox <command>`.
 
 # ROOTLESS
 
